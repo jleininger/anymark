@@ -8,8 +8,6 @@ var bookmarks = {
             }
 
             var bookmarks = result[bookmarkType] || [];
-            //TODO: Development code. Delete in production
-            console.log(bookmarks);
 
             next(bookmarks);
         });
