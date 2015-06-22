@@ -7,24 +7,43 @@ var bookmarks = {
                 return;
             }
 
-            console.log(result.length);
             var bookmarks = result[bookmarkType] || [];
-            //TODO: For testing only. Remove
-            console.log("Current bookmarks: " + bookmarks);
+            //TODO: Development code. Delete in production
+            console.log(bookmarks);
 
             next(bookmarks);
         });
     },
-    saveBookmarks: function(bookmarkType, bookmarks) {
-        chrome.storage.sync.set({bookmarkType: bookmarks}, function() {
-            console.log(bookmarkType + " bookmarks saved!");
+    saveBookmarks: function(bookmarks) {
+        chrome.storage.sync.set(bookmarks, function() {
+            console.log("Bookmark saved!");
+        });
+    },
+    clearAllBookmarks: function() {
+        chrome.storage.sync.clear(function() {
+            console.log("All bookmarks cleared!");
+        });
+    },
+    alertUser: function(message) {
+        window.alert(message);
+    },
+    run: function() {
+        chrome.contextMenus.create({
+            title: "Bookmark this page",
+            contexts: ['page'],
+            onclick: bookmarks.pages.bookmark
+        });
+
+        chrome.contextMenus.create({
+            title: "Bookmark this photo",
+            contexts: ['image'],
+            onclick: bookmarks.photos.bookmark
         });
     }
 };
 
 //Pages
 bookmarks.pages = {
-    bookmarkType: 'Pages',
     createBookmark: function(pageUrl, pageTitle) {
         var pageName = window.prompt("Name this page.", pageTitle),
             page = {
@@ -38,24 +57,30 @@ bookmarks.pages = {
             var currentTab = tabs[0],
                 page = bookmarks.pages.createBookmark(info.pageUrl, currentTab.title);
 
-            bookmarks.getSavedBookmarks(bookmarks.pages.bookmarkType, function(savedBookmarks) {
+            bookmarks.getSavedBookmarks('Pages', function(savedBookmarks) {
                 if(savedBookmarks) {
                     savedBookmarks.push(page);
-                    bookmarks.saveBookmarks(bookmarks.pages.bookmarkType, savedBookmarks);
+                    bookmarks.saveBookmarks({'Pages': savedBookmarks});
                 } else {
-                    window.alert("Unable to retrieve the bookmark! Please try again later.");
+                    bookmarks.alertUser("Unable to bookmark this page!");
                 }
             });
         });
     }
 };
 
-bookmarks.run = function() {
-    chrome.contextMenus.create({
-        title: "Bookmark current page",
-        contexts: ['page'],
-        onclick: bookmarks.pages.bookmark
-    });
+//Photos
+bookmarks.photos = {
+    bookmark: function(info) {
+        bookmarks.getSavedBookmarks('Photos', function(savedBookmarks) {
+            if(savedBookmarks) {
+                savedBookmarks.push(info.srcUrl);
+                bookmarks.saveBookmarks({'Photos': savedBookmarks});
+            } else {
+                bookmarks.alertUser("Unable to bookmark this photo!");
+            }
+        });
+    }
 };
 
 window.onload = bookmarks.run;
