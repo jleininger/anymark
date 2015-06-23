@@ -25,6 +25,11 @@ var bookmarks = {
     alertUser: function(message) {
         window.alert(message);
     },
+    messageListener: function(message) {
+        if(message.action === 'openPage') {
+            chrome.tabs.create({url: message.url});
+        }
+    },
     run: function() {
         chrome.contextMenus.create({
             title: "Bookmark this page",
@@ -37,6 +42,8 @@ var bookmarks = {
             contexts: ['image'],
             onclick: bookmarks.photos.bookmark
         });
+
+        chrome.runtime.onMessage.addListener(bookmarks.messageListener);
     }
 };
 
