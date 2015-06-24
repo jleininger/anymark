@@ -1,3 +1,11 @@
+var pageInfo = {
+    currentPage: document.getElementById('container'),
+    pageType: 'no type'
+};
+
+pageInfo.pageType = pageInfo.currentPage.getAttribute('data-pageType');
+
+//React stuff
 var Page = React.createClass({
     displayName: 'Page',
     render: function() {
@@ -15,10 +23,9 @@ var Page = React.createClass({
 var Main = React.createClass({
     displayName: 'Main',
     getInitialState: function() {
-        return {pages: []};
+        return { pages: [] };
     },
     openPage: function(url) {
-        console.log(url);
         chrome.runtime.sendMessage({action: 'openPage', url: url});
     },
     getPages: function() {
@@ -41,9 +48,17 @@ var Main = React.createClass({
         });
     },
     render: function() {
-        this.getPages();
-        return React.createElement('div', null, this.state.pages);
+        var pageToRender = React.createElement('h2', null, 'Sorry, this page is currently unavailable.');
+
+        if(pageInfo.pageType === "pages") {
+            this.getPages();
+            pageToRender = React.createElement('div', null, this.state.pages);
+        } else if (pageInfo.pageType === "photos") {
+            //Add photos here
+        }
+
+        return pageToRender;
     }
 });
 
-React.render(React.createElement(Main), document.getElementById('container'));
+React.render(React.createElement(Main), pageInfo.currentPage);
