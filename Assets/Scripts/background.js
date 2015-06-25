@@ -26,7 +26,7 @@ var bookmarks = {
         window.alert(message);
     },
     messageListener: function(message) {
-        if(message.action === 'openPage') {
+        if(message.action === 'openUrl') {
             chrome.tabs.create({url: message.url});
         }
     },
