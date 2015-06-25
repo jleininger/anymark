@@ -14,7 +14,7 @@ var bookmarks = {
     },
     saveBookmarks: function(bookmarks) {
         chrome.storage.sync.set(bookmarks, function() {
-            console.log("Bookmark saved!");
+            //console.log("Bookmark saved!");
         });
     },
     clearAllBookmarks: function() {
@@ -41,6 +41,12 @@ var bookmarks = {
             title: "Bookmark this photo",
             contexts: ['image'],
             onclick: bookmarks.photos.bookmark
+        });
+
+        chrome.contextMenus.create({
+            title: "Bookmark this video",
+            contexts: ['video'],
+            onclick: bookmarks.videos.bookmark
         });
 
         chrome.runtime.onMessage.addListener(bookmarks.messageListener);
@@ -83,6 +89,20 @@ bookmarks.photos = {
                 bookmarks.saveBookmarks({'Photos': savedBookmarks});
             } else {
                 bookmarks.alertUser("Unable to bookmark this photo!");
+            }
+        });
+    }
+};
+
+//Videos
+bookmarks.videos = {
+    bookmark: function(info) {
+        bookmarks.getSavedBookmarks('Videos', function(savedBookmarks) {
+            if(savedBookmarks) {
+                savedBookmarks.push(info.srcUrl);
+                bookmarks.saveBookmarks({'Videos': savedBookmarks});
+            } else {
+                bookmarks.alertUser("Unable to bookmark this video!");
             }
         });
     }

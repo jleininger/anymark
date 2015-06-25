@@ -22,6 +22,19 @@ var Photo = React.createClass({
     }
 });
 
+var Video = React.createClass({
+    displayName: 'Video',
+    render: function() {
+        var url = this.props.url,
+            openUrl = this.props.openUrl;
+        return React.createElement(
+            'video',
+            { className: 'video', controls: true, onClick: openUrl.bind(null, url)},
+            React.createElement('source', { src: url}, null)
+        )
+    }
+});
+
 var Main = React.createClass({
     displayName: 'Main',
     getInitialState: function() {
@@ -29,6 +42,7 @@ var Main = React.createClass({
             pageType: this.getPageType(),
             pages: [],
             photos: [],
+            videos: [],
             pageToRender: null
         };
     },
@@ -37,6 +51,8 @@ var Main = React.createClass({
             this.getPages();
         } else if(this.state.pageType === 'PHOTOS') {
             this.getPhotos();
+        } else if(this.state.pageType === 'VIDEOS') {
+            this.getVideos();
         }
     },
     getPageType: function() {
@@ -89,11 +105,26 @@ var Main = React.createClass({
             });
         });
     },
+    getVideos: function() {
+        var context = this,
+            videos = [];
+
+        this.getBookmarks('Videos', function(bookmarks) {
+            for(var i = 0; i < bookmarks.length; i++) {
+                var b = bookmarks[i];
+                videos.push(React.createElement(Video, {url: b, openUrl: context.openUrl}));
+            }
+            context.setState({
+                videos: videos,
+                pageToRender: React.createElement('div', null, videos)
+            });
+        });
+    },
     render: function() {
         if(this.state.pageToRender) {
             return this.state.pageToRender;
         } else {
-            return React.createElement('h2', null, 'Sorry, this page is currently unavailable.');
+            return React.createElement('h3', null, 'Loading page...');
         }
     }
 });

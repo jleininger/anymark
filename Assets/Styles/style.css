@@ -64,7 +64,20 @@ footer {
     width: 68px;
 }
 
-
 .photo:hover {
     border-color: #3C78D8;
 }
+/* End photo popup styling */
+
+/* Video popup styling */
+.video {
+    background-color: #000000;
+    border: 2px solid #cccccc;
+    height: 145px;
+    left: 50%;
+    margin-top: 4px;
+    position: relative;
+    transform: translateX(-50%);
+    width: 240px;
+}
+/* End video popup styling */
