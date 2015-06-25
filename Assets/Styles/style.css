@@ -73,6 +73,7 @@ footer {
 .video {
     background-color: #000000;
     border: 2px solid #cccccc;
+    cursor: pointer;
     height: 145px;
     left: 50%;
     margin-top: 4px;
