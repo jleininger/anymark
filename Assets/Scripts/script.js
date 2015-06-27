@@ -4,11 +4,12 @@ var Page = React.createClass({
         var title = this.props.title,
             url = this.props.url,
             openUrl = this.props.openUrl,
-            dragBookmark = this.props.dragBookmark;
+            dragBookmark = this.props.dragBookmark,
+            dropBookmark = this.props.dropBookmark;
 
         return React.createElement(
             'div',
-            { className: 'main-menu', onClick: openUrl.bind(null, url), draggable: true, onDragStart: dragBookmark },
+            { className: 'main-menu', onClick: openUrl.bind(null, url), draggable: true, onDragStart: dragBookmark, onDragEnd: dropBookmark },
             React.createElement('h2', null, title));
     }
 });
@@ -42,6 +43,7 @@ var Main = React.createClass({
         return {
             pageType: this.getPageType(),
             header: document.getElementById('header'),
+            headerText: document.getElementById('headerText'),
             pages: [],
             photos: [],
             videos: [],
@@ -50,7 +52,9 @@ var Main = React.createClass({
     },
     componentWillMount: function() {
         //Allow deletion on drag over on header
-        //this.state.header.addEventListener('dragover', this.dropBookmark, false);
+        //this.state.header.addEventListener('dragenter', this.dragEnter, false);
+        this.state.header.addEventListener('dragover', function(e) {e.preventDefault(); }, false);
+        this.state.header.addEventListener('drop', this.deleteBookmark, false);
 
         //Populate the current page
         if(this.state.pageType === 'PAGES') {
@@ -73,6 +77,16 @@ var Main = React.createClass({
     dropBookmark: function() {
         this.state.header.className = '';
     },
+    dragEnter: function(e) {
+        e.preventDefault();
+    },
+    deleteBookmark: function(e) {
+        var confirmDelete = window.confirm('Are you sure you want to remove this bookmark?');
+
+        if(confirmDelete) {
+            //Delete the bookmark
+        }
+    },
     openUrl: function(url) {
         chrome.runtime.sendMessage({action: 'openUrl', url: url});
     },
@@ -94,7 +108,7 @@ var Main = React.createClass({
         this.getBookmarks('Pages', function(bookmarks) {
             for(var i = 0; i < bookmarks.length; i++) {
                 var b = bookmarks[i];
-                pages.push(React.createElement(Page, {title: b.key, url: b.value, openUrl: context.openUrl, dragBookmark: context.dragBookmark}));
+                pages.push(React.createElement(Page, {title: b.key, url: b.value, openUrl: context.openUrl, dragBookmark: context.dragBookmark, dropBookmark: context.dropBookmark}));
             }
             context.setState({
                 pages: pages,
