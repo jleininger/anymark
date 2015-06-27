@@ -3,11 +3,12 @@ var Page = React.createClass({
     render: function() {
         var title = this.props.title,
             url = this.props.url,
-            openUrl = this.props.openUrl;
+            openUrl = this.props.openUrl,
+            dragBookmark = this.props.dragBookmark;
 
         return React.createElement(
             'div',
-            { className: 'main-menu', onClick: openUrl.bind(null, url) },
+            { className: 'main-menu', onClick: openUrl.bind(null, url), draggable: true, onDragStart: dragBookmark },
             React.createElement('h2', null, title));
     }
 });
@@ -40,6 +41,7 @@ var Main = React.createClass({
     getInitialState: function() {
         return {
             pageType: this.getPageType(),
+            header: document.getElementById('header'),
             pages: [],
             photos: [],
             videos: [],
@@ -47,6 +49,10 @@ var Main = React.createClass({
         };
     },
     componentWillMount: function() {
+        //Allow deletion on drag over on header
+        //this.state.header.addEventListener('dragover', this.dropBookmark, false);
+
+        //Populate the current page
         if(this.state.pageType === 'PAGES') {
             this.getPages();
         } else if(this.state.pageType === 'PHOTOS') {
@@ -61,6 +67,12 @@ var Main = React.createClass({
 
         return pageType.toUpperCase();
     },
+    dragBookmark: function() {
+        this.state.header.className = 'red-header';
+    },
+    dropBookmark: function() {
+        this.state.header.className = '';
+    },
     openUrl: function(url) {
         chrome.runtime.sendMessage({action: 'openUrl', url: url});
     },
@@ -70,7 +82,7 @@ var Main = React.createClass({
                 console.error("Unable to retrieve the bookmarks!");
                 return;
             }
-            console.log(result);
+
             var bookmarks = result[bookmarkType] || [];
             next(bookmarks);
         });
@@ -82,7 +94,7 @@ var Main = React.createClass({
         this.getBookmarks('Pages', function(bookmarks) {
             for(var i = 0; i < bookmarks.length; i++) {
                 var b = bookmarks[i];
-                pages.push(React.createElement(Page, {title: b.key, url: b.value, openUrl: context.openUrl}));
+                pages.push(React.createElement(Page, {title: b.key, url: b.value, openUrl: context.openUrl, dragBookmark: context.dragBookmark}));
             }
             context.setState({
                 pages: pages,

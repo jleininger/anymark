@@ -20,6 +20,10 @@ header {
     vertical-align: middle;
 }
 
+.red-header {
+    background-color: #C70900;
+}
+
 header h1 {
     color: #ffffff;
     font-family: 'Pacifico', sans-serif;
