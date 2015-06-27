@@ -1,31 +1,88 @@
+/* General Styling */
 body {
     background-color: #ffffff;
     font-family: 'Oxygen', sans-serif;
     margin: 0px auto;
     max-height: 420px;
     text-align: center;
-    width: 200px;
+    width: 250px;
+}
+
+a:hover {
+    text-decoration: none;
 }
 
 header {
     background-color: #3C78D8;
     cursor: pointer;
-    height: 60px;
+    height: 65px;
     margin: 0px auto;
+    vertical-align: middle;
+}
+
+.red-header {
+    background-color: #C70900;
 }
 
 header h1 {
     color: #ffffff;
+    font-family: 'Pacifico', sans-serif;
+    font-size: 3em;
+    font-weight: 300;
+    line-height: 150%;
     margin: 0;
 }
 
+footer {
+    background-color: #3C78D8;
+    height: 10px;
+    margin-top: 10px;
+}
+/* End General Styling */
+
 /* Main popup styling */
 .main-menu {
-    color: #3C78D8;
-    cursor: pointer ;
+    border-bottom: 2px solid #999999;
+    color: #999999;
+    cursor: pointer;
+    width: 100%;
+}
+
+.main-menu:hover {
     border-bottom: 2px solid #3C78D8;
+    color: #3C78D8;
+    text-decoration: none;
+}
+/* End Main Menu Styling */
+
+/* Photo popup styling */
+.photo {
+    background-color: #ffffff;
+    border: 2px solid #cccccc;
+    cursor: pointer;
+    display: inline-block;
+    height: 68px;
+    margin-top: 4px;
+    margin-left: 2px;
+    margin-right: 2px;
+    width: 68px;
 }
 
-footer {
-
+.photo:hover {
+    border-color: #3C78D8;
 }
+/* End photo popup styling */
+
+/* Video popup styling */
+.video {
+    background-color: #000000;
+    border: 2px solid #cccccc;
+    cursor: pointer;
+    height: 145px;
+    left: 50%;
+    margin-top: 4px;
+    position: relative;
+    transform: translateX(-50%);
+    width: 240px;
+}
+/* End video popup styling */
