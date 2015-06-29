@@ -1,3 +1,30 @@
+var Header = React.createClass({
+    displayName: 'Header',
+    getInitialState: function() {
+        return { headerText: 'Bookmarks', headerClass: '' }
+    },
+    dragEnter: function(e) {
+        e.preventDefault();
+        this.setState({ headerText: 'Remove?' });
+    },
+    dragBookmark: function() {
+        this.setState({ headerText: 'Remove?', headerClass: 'red-header' });
+    },
+    dragOver: function(e) {
+        e.preventDefault();
+    },
+    dropBookmark: function() {
+        this.setState({ headerText: 'Bookmarks', headerClass: '' });
+    },
+    render: function() {
+        return React.createElement(
+            'header',
+            { className: this.state.headerClass },
+            'Bookmarks'
+        );
+    }
+});
+
 var Page = React.createClass({
     displayName: 'Page',
     render: function() {
@@ -10,7 +37,8 @@ var Page = React.createClass({
         return React.createElement(
             'div',
             { className: 'main-menu', onClick: openUrl.bind(null, url), draggable: true, onDragStart: dragBookmark, onDragEnd: dropBookmark },
-            React.createElement('h2', null, title));
+            React.createElement('h2', null, title)
+        );
     }
 });
 
@@ -42,8 +70,7 @@ var Main = React.createClass({
     getInitialState: function() {
         return {
             pageType: this.getPageType(),
-            header: document.getElementById('header'),
-            headerText: document.getElementById('headerText'),
+            header: React.createElement('Header', null),
             pages: [],
             photos: [],
             videos: [],
@@ -51,11 +78,6 @@ var Main = React.createClass({
         };
     },
     componentWillMount: function() {
-        //Allow deletion on drag over on header
-        //this.state.header.addEventListener('dragenter', this.dragEnter, false);
-        this.state.header.addEventListener('dragover', function(e) {e.preventDefault(); }, false);
-        this.state.header.addEventListener('drop', this.deleteBookmark, false);
-
         //Populate the current page
         if(this.state.pageType === 'PAGES') {
             this.getPages();
@@ -70,15 +92,6 @@ var Main = React.createClass({
             pageType = currentPage.getAttribute('data-pageType');
 
         return pageType.toUpperCase();
-    },
-    dragBookmark: function() {
-        this.state.header.className = 'red-header';
-    },
-    dropBookmark: function() {
-        this.state.header.className = '';
-    },
-    dragEnter: function(e) {
-        e.preventDefault();
     },
     deleteBookmark: function(e) {
         var confirmDelete = window.confirm('Are you sure you want to remove this bookmark?');
@@ -108,11 +121,14 @@ var Main = React.createClass({
         this.getBookmarks('Pages', function(bookmarks) {
             for(var i = 0; i < bookmarks.length; i++) {
                 var b = bookmarks[i];
-                pages.push(React.createElement(Page, {title: b.key, url: b.value, openUrl: context.openUrl, dragBookmark: context.dragBookmark, dropBookmark: context.dropBookmark}));
+                pages.push(React.createElement(
+                    Page,
+                    {title: b.key, url: b.value, openUrl: context.openUrl, dragBookmark: context.state.header.dragBookmark, dropBookmark: context.state.header.dropBookmark}
+                ));
             }
             context.setState({
                 pages: pages,
-                pageToRender: React.createElement('div', null, pages)
+                pageToRender: React.createElement('div', null, [context.state.header, pages])
             });
         });
     },
