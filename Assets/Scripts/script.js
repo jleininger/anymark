@@ -42,8 +42,7 @@ var Main = React.createClass({
     getInitialState: function() {
         return {
             pageType: this.getPageType(),
-            header: document.getElementById('header'),
-            headerText: document.getElementById('headerText'),
+            header: document.getElementById('redHeader'),
             pages: [],
             photos: [],
             videos: [],
@@ -52,7 +51,6 @@ var Main = React.createClass({
     },
     componentWillMount: function() {
         //Allow deletion on drag over on header
-        //this.state.header.addEventListener('dragenter', this.dragEnter, false);
         this.state.header.addEventListener('dragover', function(e) {e.preventDefault(); }, false);
         this.state.header.addEventListener('drop', this.deleteBookmark, false);
 
@@ -72,13 +70,10 @@ var Main = React.createClass({
         return pageType.toUpperCase();
     },
     dragBookmark: function() {
-        this.state.header.className = 'red-header';
+        this.state.header.style.display = 'block';
     },
     dropBookmark: function() {
-        this.state.header.className = '';
-    },
-    dragEnter: function(e) {
-        e.preventDefault();
+        this.state.header.style.display = 'none';
     },
     deleteBookmark: function(e) {
         var confirmDelete = window.confirm('Are you sure you want to remove this bookmark?');

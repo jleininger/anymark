@@ -20,8 +20,16 @@ header {
     vertical-align: middle;
 }
 
+.header-main {
+    position: relative;
+}
+
 .red-header {
     background-color: #C70900;
+    display: none;
+    position: absolute;
+    top: 0;
+    width: 100%;
 }
 
 header h1 {
