@@ -10,7 +10,8 @@ var Page = React.createClass({
         return React.createElement(
             'div',
             { className: 'main-menu', onClick: openUrl.bind(null, url), draggable: true, onDragStart: dragBookmark, onDragEnd: dropBookmark },
-            React.createElement('h2', null, title));
+            React.createElement('h2', null, title)
+        );
     }
 });
 
@@ -70,6 +71,7 @@ var Main = React.createClass({
         return pageType.toUpperCase();
     },
     dragBookmark: function() {
+        console.log('Dragging the bookmark');
         this.state.header.style.display = 'block';
     },
     dropBookmark: function() {
@@ -103,7 +105,10 @@ var Main = React.createClass({
         this.getBookmarks('Pages', function(bookmarks) {
             for(var i = 0; i < bookmarks.length; i++) {
                 var b = bookmarks[i];
-                pages.push(React.createElement(Page, {title: b.key, url: b.value, openUrl: context.openUrl, dragBookmark: context.dragBookmark, dropBookmark: context.dropBookmark}));
+                pages.push(React.createElement(
+                    Page,
+                    {title: b.key, url: b.value, openUrl: context.openUrl, dragBookmark: context.dragBookmark, dropBookmark: context.dropBookmark}
+                ));
             }
             context.setState({
                 pages: pages,
