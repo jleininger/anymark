@@ -160,7 +160,7 @@ var Main = React.createClass({
     deletePhoto: function(index) {
         //Remove React components
         var photos = this.state.photos;
-        this.setState( {pages: photos.splice(index, 1)});
+        this.setState( {photos: photos.splice(index, 1)});
 
         //Remove bookmarks in storage
         this.getBookmarks('Photos', function(bookmarks) {
@@ -184,9 +184,11 @@ var Main = React.createClass({
         });
     },
     deleteVideo: function(index) {
+        console.log('Index: ' + index);
         //Remove React components
         var videos = this.state.videos;
-        this.setState( {pages: videos.splice(index, 1)});
+        console.log(videos[index]);
+        this.setState( {videos: videos.splice(index, 1)});
 
         //Remove bookmarks in storage
         this.getBookmarks('Videos', function(bookmarks) {
