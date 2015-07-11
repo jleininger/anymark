@@ -50,7 +50,7 @@ var Main = React.createClass({
     displayName: 'Main',
     getInitialState: function() {
         return {
-            pageType: this.getPageType(),
+            pageInfo: this.getPageInfo(),
             header: document.getElementById('redHeader'),
             pages: [],
             photos: [],
@@ -64,19 +64,27 @@ var Main = React.createClass({
         this.state.header.addEventListener('drop', this.deleteBookmark, false);
 
         //Populate the current page
-        if(this.state.pageType === 'PAGES') {
+        if(this.state.pageInfo.pageType === 'PAGES') {
             this.getPages();
-        } else if(this.state.pageType === 'PHOTOS') {
+        } else if(this.state.pageInfo.pageType === 'PHOTOS') {
             this.getPhotos();
-        } else if(this.state.pageType === 'VIDEOS') {
+        } else if(this.state.pageInfo.pageType === 'VIDEOS') {
             this.getVideos();
         }
     },
-    getPageType: function() {
-        var currentPage = document.getElementById('container'),
-            pageType = currentPage.getAttribute('data-pageType');
+    getPageInfo: function() {
+        var pageInfo = {
+            currentPage: document.getElementById('container'),
+            isIncognito: false
+        };
 
-        return pageType.toUpperCase();
+        pageInfo.pageType = pageInfo.currentPage.getAttribute('data-pageType').toUpperCase();
+        pageInfo.isIncognito = chrome.runtime.sendMessage({action: 'checkIncognito'}, null, function(isIncognito) {
+            //TODO: Figure out how to handle the slowness of the callback. Info is not there when page is populating.
+            pageInfo.isIncognito = isIncognito;
+        });
+
+        return pageInfo;
     },
     dragBookmark: function(index, e) {
         e.dataTransfer.setData('index', index);
@@ -101,11 +109,11 @@ var Main = React.createClass({
             index = e.dataTransfer.getData('index');
 
         if(confirmDelete) {
-            if(this.state.pageType === 'PAGES') {
+            if(this.state.pageInfo.pageType === 'PAGES') {
                 this.deletePage(index);
-            } else if(this.state.pageType === 'PHOTOS') {
+            } else if(this.state.pageInfo.pageType === 'PHOTOS') {
                 this.deletePhoto(index);
-            } else if(this.state.pageType === 'VIDEOS') {
+            } else if(this.state.pageInfo.pageType === 'VIDEOS') {
                 this.deleteVideo(index);
             }
         }
@@ -149,7 +157,11 @@ var Main = React.createClass({
         this.getBookmarks('Photos', function(bookmarks) {
             for(var i = 0; i < bookmarks.length; i++) {
                 var b = bookmarks[i];
-                photos.push(React.createElement(Photo, {url: b, index: i, openUrl: context.openUrl, dragBookmark: context.dragBookmark, dropBookmark: context.dropBookmark}));
+                console.log(b);
+                console.log(context.state.pageInfo.isIncognito);
+                if(b.isIncognito === context.state.pageInfo.isIncognito) {
+                    photos.push(React.createElement(Photo, {url: b.url, index: i, openUrl: context.openUrl, dragBookmark: context.dragBookmark, dropBookmark: context.dropBookmark}));
+                }
             }
             context.setState({
                 photos: photos,
@@ -206,5 +218,3 @@ var Main = React.createClass({
 });
 
 React.render(React.createElement(Main), document.getElementById('container'));
-
-//TODO: Send a message to the background page to check for incognito.

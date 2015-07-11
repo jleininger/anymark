@@ -1,4 +1,7 @@
 var bookmarks = {
+    pageInfo: {
+        isIncognito: false
+    },
     //Shared functions for all bookmark types
     getSavedBookmarks: function(bookmarkType, next) {
         chrome.storage.sync.get(bookmarkType, function(result) {
@@ -25,12 +28,20 @@ var bookmarks = {
     alertUser: function(message) {
         window.alert(message);
     },
-    messageListener: function(message) {
+    messageListener: function(message, sender, sendResponse) {
         if(message.action === 'openUrl') {
             chrome.tabs.create({url: message.url});
+        } else if(message.action === 'checkIncognito') {
+            sendResponse(bookmarks.pageInfo.isIncognito);
+        }
+    },
+    updateListener: function(tabId, changeInfo, tab) {
+        if(changeInfo && tab && changeInfo.status === 'complete') {
+            bookmarks.pageInfo.isIncognito = tab.incognito;
         }
     },
     run: function() {
+        //Menus
         chrome.contextMenus.create({
             title: "Bookmark this page",
             contexts: ['page'],
@@ -49,11 +60,9 @@ var bookmarks = {
             onclick: bookmarks.videos.bookmark
         });
 
+        //Listeners
         chrome.runtime.onMessage.addListener(bookmarks.messageListener);
-
-        chrome.tabs.onCreated.addListener(function(tab) {
-            console.log('This tab is: ' + ((tab.incognito) ? 'in incognito' : 'is not in incognito'));
-        });
+        chrome.tabs.onUpdated.addListener(bookmarks.updateListener);
     }
 };
 
@@ -63,7 +72,8 @@ bookmarks.pages = {
         var pageName = window.prompt("Name this page.", pageTitle),
             page = {
                 key: pageName,
-                value: pageUrl
+                value: pageUrl,
+                isIncognito: bookmarks.pageInfo.isIncognito
             };
         return page;
     },
@@ -89,7 +99,7 @@ bookmarks.photos = {
     bookmark: function(info) {
         bookmarks.getSavedBookmarks('Photos', function(savedBookmarks) {
             if(savedBookmarks) {
-                savedBookmarks.push(info.srcUrl);
+                savedBookmarks.push({url: info.srcUrl, isIncognito: bookmarks.pageInfo.isIncognito});
                 bookmarks.saveBookmarks({'Photos': savedBookmarks});
             } else {
                 bookmarks.alertUser("Unable to bookmark this photo!");
@@ -103,7 +113,7 @@ bookmarks.videos = {
     bookmark: function(info) {
         bookmarks.getSavedBookmarks('Videos', function(savedBookmarks) {
             if(savedBookmarks) {
-                savedBookmarks.push(info.srcUrl);
+                savedBookmarks.push({url: info.srcUrl, isIncognito: bookmarks.pageInfo.isIncognito});
                 bookmarks.saveBookmarks({'Videos': savedBookmarks});
             } else {
                 bookmarks.alertUser("Unable to bookmark this video!");
