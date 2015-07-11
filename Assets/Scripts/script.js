@@ -206,3 +206,5 @@ var Main = React.createClass({
 });
 
 React.render(React.createElement(Main), document.getElementById('container'));
+
+//TODO: Send a message to the background page to check for incognito.

@@ -19,6 +19,7 @@
     "default_icon": "/Assets/Icons/logo16.png",
     "default_popup": "popup.html"
   },
+  "incognito": "split",
   "background": {
     "scripts": ["/Assets/Scripts/background.js"]
    }

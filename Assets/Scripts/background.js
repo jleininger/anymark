@@ -50,6 +50,10 @@ var bookmarks = {
         });
 
         chrome.runtime.onMessage.addListener(bookmarks.messageListener);
+
+        chrome.tabs.onCreated.addListener(function(tab) {
+            console.log('This tab is: ' + ((tab.incognito) ? 'in incognito' : 'is not in incognito'));
+        });
     }
 };
 
