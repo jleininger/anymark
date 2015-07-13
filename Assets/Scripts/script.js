@@ -75,14 +75,9 @@ var Main = React.createClass({
     getPageInfo: function() {
         var pageInfo = {
             currentPage: document.getElementById('container'),
-            isIncognito: false
+            isIncognito: chrome.extension.getBackgroundPage().bookmarks.pageInfo.isIncognito
         };
-
         pageInfo.pageType = pageInfo.currentPage.getAttribute('data-pageType').toUpperCase();
-        pageInfo.isIncognito = chrome.runtime.sendMessage({action: 'checkIncognito'}, null, function(isIncognito) {
-            //TODO: Figure out how to handle the slowness of the callback. Info is not there when page is populating.
-            pageInfo.isIncognito = isIncognito;
-        });
 
         return pageInfo;
     },
@@ -128,10 +123,12 @@ var Main = React.createClass({
         this.getBookmarks('Pages', function(bookmarks) {
             for(var i = 0; i < bookmarks.length; i++) {
                 var b = bookmarks[i];
-                pages.push(React.createElement(
-                    Page,
-                    {title: b.key, url: b.value, index: i, openUrl: context.openUrl, dragBookmark: context.dragBookmark, dropBookmark: context.dropBookmark}
-                ));
+                if(!b.isIncognito || context.state.pageInfo.isIncognito) {
+                    pages.push(React.createElement(
+                        Page,
+                        {title: b.key, url: b.value, index: i, openUrl: context.openUrl, dragBookmark: context.dragBookmark, dropBookmark: context.dropBookmark}
+                    ));
+                }
             }
             context.setState({
                 pages: pages,
@@ -157,9 +154,7 @@ var Main = React.createClass({
         this.getBookmarks('Photos', function(bookmarks) {
             for(var i = 0; i < bookmarks.length; i++) {
                 var b = bookmarks[i];
-                console.log(b);
-                console.log(context.state.pageInfo.isIncognito);
-                if(b.isIncognito === context.state.pageInfo.isIncognito) {
+                if(!b.isIncognito || context.state.pageInfo.isIncognito) {
                     photos.push(React.createElement(Photo, {url: b.url, index: i, openUrl: context.openUrl, dragBookmark: context.dragBookmark, dropBookmark: context.dropBookmark}));
                 }
             }
@@ -187,7 +182,9 @@ var Main = React.createClass({
         this.getBookmarks('Videos', function(bookmarks) {
             for(var i = 0; i < bookmarks.length; i++) {
                 var b = bookmarks[i];
-                videos.push(React.createElement(Video, {url: b, index: i, openUrl: context.openUrl, dragBookmark: context.dragBookmark, dropBookmark: context.dropBookmark}));
+                if(!b.isIncognito || context.state.pageInfo.isIncognito) {
+                    videos.push(React.createElement(Video, {url: b.url, index: i, openUrl: context.openUrl, dragBookmark: context.dragBookmark, dropBookmark: context.dropBookmark}));
+                }
             }
             context.setState({
                 videos: videos,
