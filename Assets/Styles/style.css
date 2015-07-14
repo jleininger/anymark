@@ -61,6 +61,19 @@ footer {
     color: #3C78D8;
     text-decoration: none;
 }
+
+.main-menu-incognito {
+    border-bottom: 2px solid #999999;
+    color: #999999;
+    cursor: pointer;
+    width: 100%;
+}
+
+.main-menu-incognito:hover {
+    border-bottom: 2px solid #191919;
+    color: #191919;
+    text-decoration: none;
+}
 /* End Main Menu Styling */
 
 /* Photo popup styling */

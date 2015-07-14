@@ -59,6 +59,12 @@ var Main = React.createClass({
         };
     },
     componentWillMount: function() {
+        //Change color scheme based on incognito
+        if(this.state.pageInfo.isIncognito) {
+            document.getElementById('mainHeader').style.backgroundColor = "#191919";
+            document.getElementsByTagName('footer')[0].style.backgroundColor = "#191919";
+        }
+
         //Allow deletion on drag over on header
         this.state.header.addEventListener('dragover', function(e) {e.preventDefault(); }, false);
         this.state.header.addEventListener('drop', this.deleteBookmark, false);
