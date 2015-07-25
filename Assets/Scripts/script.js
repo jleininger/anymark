@@ -4,13 +4,16 @@ var Page = React.createClass({
         var title = this.props.title,
             url = this.props.url,
             index = this.props.index,
+            classType = 'main-menu',
+            pageIncognito = this.props.pageIncognito,
             openUrl = this.props.openUrl,
             dragBookmark = this.props.dragBookmark,
             dropBookmark = this.props.dropBookmark;
 
+        if(pageIncognito) { classType += ' main-menu-incognito'; }
         return React.createElement(
             'div',
-            { className: 'main-menu', onClick: openUrl.bind(null, url), draggable: true, onDragStart: dragBookmark.bind(null, index), onDragEnd: dropBookmark },
+            { className: classType, onClick: openUrl.bind(null, url), draggable: true, onDragStart: dragBookmark.bind(null, index), onDragEnd: dropBookmark },
             React.createElement('h2', null, title)
         );
     }
@@ -21,11 +24,14 @@ var Photo = React.createClass({
     render: function() {
         var url = this.props.url,
             index = this.props.index,
+            classType = 'photo',
+            pageIncognito = this.props.pageIncognito,
             openUrl = this.props.openUrl,
             dragBookmark = this.props.dragBookmark,
             dropBookmark = this.props.dropBookmark;
 
-        return React.createElement('img', {className: 'photo', src: url, onClick: openUrl.bind(null, url), draggable: true, onDragStart: dragBookmark.bind(null, index), onDragEnd: dropBookmark}, null);
+        if(pageIncognito) { classType += ' photo-incognito'; }
+        return React.createElement('img', {className: classType, src: url, onClick: openUrl.bind(null, url), draggable: true, onDragStart: dragBookmark.bind(null, index), onDragEnd: dropBookmark}, null);
     }
 });
 
@@ -34,13 +40,16 @@ var Video = React.createClass({
     render: function() {
         var url = this.props.url,
             index = this.props.index,
+            classType = 'video',
+            pageIncognito = this.props.pageIncognito,
             openUrl = this.props.openUrl,
             dragBookmark = this.props.dragBookmark,
             dropBookmark = this.props.dropBookmark;
 
+        if(pageIncognito) { classType += ' video-incognito'; }
         return React.createElement(
             'video',
-            { className: 'video', controls: true, onClick: openUrl.bind(null, url), draggable: true, onDragStart: dragBookmark.bind(null, index), onDragEnd: dropBookmark},
+            { className: classType, controls: true, onClick: openUrl.bind(null, url), draggable: true, onDragStart: dragBookmark.bind(null, index), onDragEnd: dropBookmark},
             React.createElement('source', { src: url}, null)
         )
     }
@@ -132,7 +141,7 @@ var Main = React.createClass({
                 if(!b.isIncognito || context.state.pageInfo.isIncognito) {
                     pages.push(React.createElement(
                         Page,
-                        {title: b.key, url: b.value, index: i, openUrl: context.openUrl, dragBookmark: context.dragBookmark, dropBookmark: context.dropBookmark}
+                        {title: b.key, url: b.value, index: i, pageIncognito: context.state.pageInfo.isIncognito, openUrl: context.openUrl, dragBookmark: context.dragBookmark, dropBookmark: context.dropBookmark}
                     ));
                 }
             }
@@ -161,7 +170,7 @@ var Main = React.createClass({
             for(var i = 0; i < bookmarks.length; i++) {
                 var b = bookmarks[i];
                 if(!b.isIncognito || context.state.pageInfo.isIncognito) {
-                    photos.push(React.createElement(Photo, {url: b.url, index: i, openUrl: context.openUrl, dragBookmark: context.dragBookmark, dropBookmark: context.dropBookmark}));
+                    photos.push(React.createElement(Photo, {url: b.url, index: i, pageIncognito: context.state.pageInfo.isIncognito, openUrl: context.openUrl, dragBookmark: context.dragBookmark, dropBookmark: context.dropBookmark}));
                 }
             }
             context.setState({
@@ -189,7 +198,7 @@ var Main = React.createClass({
             for(var i = 0; i < bookmarks.length; i++) {
                 var b = bookmarks[i];
                 if(!b.isIncognito || context.state.pageInfo.isIncognito) {
-                    videos.push(React.createElement(Video, {url: b.url, index: i, openUrl: context.openUrl, dragBookmark: context.dragBookmark, dropBookmark: context.dropBookmark}));
+                    videos.push(React.createElement(Video, {url: b.url, index: i, pageIncognito: context.state.pageInfo.isIncognito, openUrl: context.openUrl, dragBookmark: context.dragBookmark, dropBookmark: context.dropBookmark}));
                 }
             }
             context.setState({

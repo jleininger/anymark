@@ -35,9 +35,14 @@ var bookmarks = {
             sendResponse(bookmarks.pageInfo.isIncognito);
         }
     },
-    updateListener: function(tabId, changeInfo, tab) {
-        if(changeInfo && tab && changeInfo.status === 'complete') {
-            bookmarks.pageInfo.isIncognito = tab.incognito;
+    updateListener: function(windowId) {
+        if(windowId === -1) {
+            chrome.tabs.query({ currentWindow: true, active: true }, function(tabs) {
+                if (tabs.length > 0 && tabs[0].incognito) {
+                    console.log("Tab is incognito: ", tabs[0].incognito);
+                    bookmarks.pageInfo.isIncognito = tabs[0].incognito;
+                }
+            });
         }
     },
     run: function() {
@@ -63,6 +68,7 @@ var bookmarks = {
         //Listeners
         chrome.runtime.onMessage.addListener(bookmarks.messageListener);
         chrome.tabs.onUpdated.addListener(bookmarks.updateListener);
+        chrome.windows.onFocusChanged.addListener(bookmarks.updateListener);
     }
 };
 

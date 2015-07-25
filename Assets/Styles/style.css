@@ -62,13 +62,6 @@ footer {
     text-decoration: none;
 }
 
-.main-menu-incognito {
-    border-bottom: 2px solid #999999;
-    color: #999999;
-    cursor: pointer;
-    width: 100%;
-}
-
 .main-menu-incognito:hover {
     border-bottom: 2px solid #191919;
     color: #191919;
@@ -92,6 +85,10 @@ footer {
 .photo:hover {
     border-color: #3C78D8;
 }
+
+.photo-incognito:hover {
+    border-color: #191919;
+}
 /* End photo popup styling */
 
 /* Video popup styling */
@@ -105,5 +102,9 @@ footer {
     position: relative;
     transform: translateX(-50%);
     width: 240px;
+}
+
+.video-incognito:hover {
+    border-color: #191919;
 }
 /* End video popup styling */
