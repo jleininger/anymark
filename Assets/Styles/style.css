@@ -108,3 +108,20 @@ footer {
     border-color: #191919;
 }
 /* End video popup styling */
+
+/* About popup styling */
+.img-logo {
+    margin: 0 auto;
+    height: 100px;
+    width: 100px;
+}
+
+.about-text {
+    margin-top: 0;
+}
+
+.react-text {
+    color: #61DAFB;
+}
+
+/* End About popup styling */
