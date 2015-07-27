@@ -1,10 +1,14 @@
 window.onload = function() {
+    var mainMenus = document.getElementsByClassName('main-menu'),
+        header = document.getElementById('mainHeader'),
+        footer = document.getElementsByTagName('footer')[0];
+
     if(chrome.extension.getBackgroundPage().bookmarks.pageInfo.isIncognito) {
-        document.getElementById('mainHeader').style.backgroundColor = "#191919";
-        document.getElementsByTagName('footer')[0].style.backgroundColor = "#191919";
-        document.getElementById('pagesMenu').className += " main-menu-incognito";
-        document.getElementById('photosMenu').className += " main-menu-incognito";
-        document.getElementById('videosMenu').className += " main-menu-incognito";
-        document.getElementById('settingsMenu').className += " main-menu-incognito";
+        header.style.backgroundColor = "#191919";
+        footer.style.backgroundColor = "#191919";
+
+        for (var i = 0; i < mainMenus.length; i++) {
+            mainMenus[i].className += " main-menu-incognito";
+        }
     }
 };

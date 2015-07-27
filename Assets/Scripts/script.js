@@ -224,9 +224,11 @@ var Main = React.createClass({
         if(this.state.pageToRender) {
             return this.state.pageToRender;
         } else {
-            return React.createElement('h3', null, 'Loading page...');
+            return React.createElement('h3', null, 'Loading...');
         }
     }
 });
 
+//Remove all options from context menu
+chrome.contextMenus.removeAll();
 React.render(React.createElement(Main), document.getElementById('container'));
