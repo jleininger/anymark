@@ -208,10 +208,8 @@ var Main = React.createClass({
         });
     },
     deleteVideo: function(index) {
-        console.log('Index: ' + index);
         //Remove React components
         var videos = this.state.videos;
-        console.log(videos[index]);
         this.setState( {videos: videos.splice(index, 1)});
 
         //Remove bookmarks in storage
@@ -230,5 +228,5 @@ var Main = React.createClass({
 });
 
 //Remove all options from context menu
-chrome.contextMenus.removeAll();
+//chrome.contextMenus.removeAll();
 React.render(React.createElement(Main), document.getElementById('container'));
