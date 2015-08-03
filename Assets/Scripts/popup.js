@@ -1,14 +1,1 @@
-window.onload = function() {
-    var mainMenus = document.getElementsByClassName('main-menu'),
-        header = document.getElementById('mainHeader'),
-        footer = document.getElementsByTagName('footer')[0];
-
-    if(chrome.extension.getBackgroundPage().bookmarks.pageInfo.isIncognito) {
-        header.style.backgroundColor = "#191919";
-        footer.style.backgroundColor = "#191919";
-
-        for (var i = 0; i < mainMenus.length; i++) {
-            mainMenus[i].className += " main-menu-incognito";
-        }
-    }
-};
+window.onload=function(){var a=document.getElementsByClassName("main-menu"),b=document.getElementById("mainHeader"),c=document.getElementsByTagName("footer")[0];if(chrome.extension.getBackgroundPage().bookmarks.pageInfo.isIncognito){b.style.backgroundColor="#191919",c.style.backgroundColor="#191919";for(var d=0;d<a.length;d++)a[d].className+=" main-menu-incognito"}};
