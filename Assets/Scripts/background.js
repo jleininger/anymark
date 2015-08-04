@@ -2,6 +2,7 @@ var bookmarks = {
     pageInfo: {
         isIncognito: false
     },
+    firstTime: false,
     //Shared functions for all bookmark types
     getSavedBookmarks: function(bookmarkType, next) {
         chrome.storage.sync.get(bookmarkType, function(result) {
@@ -31,8 +32,8 @@ var bookmarks = {
     messageListener: function(message, sender, sendResponse) {
         if(message.action === 'openUrl') {
             chrome.tabs.create({url: message.url});
-        } else if(message.action === 'checkIncognito') {
-            sendResponse(bookmarks.pageInfo.isIncognito);
+        } else if(message.action === 'instructionsRead') {
+            bookmarks.firstTime = false;
         }
     },
     updateListener: function(windowId) {
@@ -43,6 +44,11 @@ var bookmarks = {
                     bookmarks.pageInfo.isIncognito = tabs[0].incognito;
                 }
             });
+        }
+    },
+    installListener: function(details) {
+        if(details && details.reason === 'install') {
+            bookmarks.firstTime = true;
         }
     },
     run: function() {
@@ -69,6 +75,7 @@ var bookmarks = {
         chrome.runtime.onMessage.addListener(bookmarks.messageListener);
         chrome.tabs.onUpdated.addListener(bookmarks.updateListener);
         chrome.windows.onFocusChanged.addListener(bookmarks.updateListener);
+        chrome.runtime.onInstalled.addListener(bookmarks.installListener);
     }
 };
 

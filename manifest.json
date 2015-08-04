@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name": "BookMarks Development Build (React.js)",
-  "description": "Organize your bookmarks like never before.",
+  "name": "AnyMark Development Build",
+  "description": "Bookmark all your favorite pages, photos, and videos",
   "version": "0.1.0",
 
   "permissions": [
