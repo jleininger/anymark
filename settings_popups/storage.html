@@ -9,34 +9,20 @@
     <link rel="stylesheet" href="/Assets/Styles/style.css">
 </head>
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title>Bookmarks</title>
-    <link href='http://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/Assets/Styles/style.css">
-    <script src="/Vendor/React/React_development.js"></script>
-</head>
-
 <body>
-<a href="/Settings_popups/storage.html">
-    <header id="redHeader" class="red-header-show">
-        <h1>Deep Six</h1>
+<a href="/popup_settings.html">
+    <header id="mainHeader">
+        <h1>Bookmarks</h1>
     </header>
 </a>
-<div class="container">
-    <div class="alert alert-danger" role="alert">
-        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-        <span class="sr-only">Warning:</span>
-        This will delete all bookmarks in selected category.
-    </div>
-    <div id="container"></div>
+<div id="container" class="container">
+    <a href="deep-six.html">
+        <div class="main-menu">
+            <h2>Deep Six</h2>
+        </div>
+    </a>
 </div>
-<footer class="red-footer"></footer>
-<script type="text/javascript" src="/Assets/Scripts/deepSix.js"></script>
+<footer></footer>
+<script type="text/javascript" src="/Assets/Scripts/popup.js"></script>
 </body>
-</html>
 </html>
