@@ -18,26 +18,34 @@
     </a>
 
     <div id="container" class="container">
-        <a href="popup_pages.html">
-            <div id="pagesMenu" class="main-menu">
-                <h2>Pages</h2>
-            </div>
-        </a>
-        <a href="popup_photos.html">
-            <div id="photosMenu" class="main-menu">
-                <h2>Photos</h2>
-            </div>
-        </a>
-        <a href="popup_videos.html">
-            <div id="videosMenu" class="main-menu">
-                <h2>Videos</h2>
-            </div>
-        </a>
-        <a href="popup_settings.html">
-            <div id="settingsMenu" class="main-menu">
-                <h2>Settings</h2>
-            </div>
-        </a>
+        <div id="mainPopup" class="main-popup">
+            <a href="popup_pages.html">
+                <div id="pagesMenu" class="main-menu">
+                    <h2>Pages</h2>
+                </div>
+            </a>
+            <a href="popup_photos.html">
+                <div id="photosMenu" class="main-menu">
+                    <h2>Photos</h2>
+                </div>
+            </a>
+            <a href="popup_videos.html">
+                <div id="videosMenu" class="main-menu">
+                    <h2>Videos</h2>
+                </div>
+            </a>
+            <a href="popup_settings.html">
+                <div id="settingsMenu" class="main-menu">
+                    <h2>Settings</h2>
+                </div>
+            </a>
+        </div>
+        <div id="welcomeMsg" class="welcome">
+            <span id="exitIcon" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            <h1>Thank you</h1>
+            <h4>for using <span class="logo">Anymark!</span></h4>
+            <p>In order to use incognito bookmarks, you must <a id="allowLink">allow this extension</a> to run in incognito mode.</p>
+        </div>
     </div>
     <footer></footer>
     <script type="text/javascript" src="Assets/Scripts/popup.js"></script>
