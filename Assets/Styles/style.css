@@ -45,6 +45,11 @@ header h1 {
     margin: 0;
 }
 
+.dip {
+    font-size: 2.80em;
+    line-height: 145%;
+}
+
 ::-webkit-scrollbar {
     height: 10px;
     width: 5px;
