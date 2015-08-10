@@ -3,7 +3,7 @@
 
   "name": "AnyMark (alpha)",
   "description": "Bookmark all your favorite pages, photos, and videos.",
-  "version": "0.1.3",
+  "version": "0.1.5",
 
   "permissions": [
     "contextMenus",
