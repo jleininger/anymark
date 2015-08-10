@@ -1,1 +1,37 @@
-function openExtensionPage(){removeWelcome(),chrome.tabs.create({url:"chrome://extensions/"})}function removeWelcome(){mainPopup.style.display="block",welcomeMsg.style.display="none"}window.onload=function(){var a=document.getElementsByClassName("main-menu"),b=document.getElementById("mainHeader"),c=document.getElementsByTagName("footer")[0],d=document.getElementById("exitIcon"),e=document.getElementById("mainPopup"),f=document.getElementById("welcomeMsg"),g=document.getElementById("allowLink"),h=chrome.extension.getBackgroundPage();if(h.bookmarks.firstTime&&(e.style.display="none",f.style.display="block",d.addEventListener("click",removeWelcome),g.addEventListener("click",openExtensionPage),chrome.runtime.sendMessage({action:"instructionsRead"})),h.bookmarks.pageInfo.isIncognito){b.style.backgroundColor="#191919",c.style.backgroundColor="#191919";for(var i=0;i<a.length;i++)a[i].className+=" main-menu-incognito"}};
+window.onload = function() {
+    var mainMenus = document.getElementsByClassName('main-menu'),
+        header = document.getElementById('mainHeader'),
+        footer = document.getElementsByTagName('footer')[0],
+        exitIcon = document.getElementById('exitIcon'),
+        mainPopup = document.getElementById('mainPopup'),
+        welcomeMsg = document.getElementById('welcomeMsg'),
+        allowLink = document.getElementById('allowLink'),
+        backgroundPage = chrome.extension.getBackgroundPage();
+
+    if(backgroundPage.bookmarks.firstTime) {
+        mainPopup.style.display = 'none';
+        welcomeMsg.style.display = 'block';
+        exitIcon.addEventListener('click', removeWelcome);
+        allowLink.addEventListener('click', openExtensionPage);
+        chrome.runtime.sendMessage({action: 'instructionsRead'});
+    }
+
+    if(backgroundPage.bookmarks.pageInfo.isIncognito) {
+        header.style.backgroundColor = "#191919";
+        footer.style.backgroundColor = "#191919";
+
+        for (var i = 0; i < mainMenus.length; i++) {
+            mainMenus[i].className += " main-menu-incognito";
+        }
+    }
+
+    function openExtensionPage() {
+        removeWelcome();
+        chrome.tabs.create({url: 'chrome://extensions/'});
+    }
+
+    function removeWelcome() {
+        mainPopup.style.display = 'block';
+        welcomeMsg.style.display = 'none';
+    }
+};
