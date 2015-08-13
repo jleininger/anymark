@@ -55,6 +55,27 @@ var Video = React.createClass({
     }
 });
 
+var ConfirmWindow = React.createClass({
+    displayName: 'ConfirmWindow',
+    render: function() {
+        return React.createElement(
+            'div',
+            null,
+            React.createElement('div',
+                {className: 'white-content'},
+                "Are you sure?",
+                React.createElement(
+                    'div',
+                    null,
+                    React.createElement('div', {className: 'btn-dialog confirm'}, "Yes"),
+                    React.createElement('div', {className: 'btn-dialog deny'}, "No")
+                )
+            ),
+            React.createElement('div', {className: 'black-overlay'}, null)
+        );
+    }
+});
+
 var Main = React.createClass({
     displayName: 'Main',
     getInitialState: function() {
@@ -147,7 +168,7 @@ var Main = React.createClass({
             }
             context.setState({
                 pages: pages,
-                pageToRender: React.createElement('div', null, pages)
+                pageToRender: React.createElement('div', null, pages, React.createElement(ConfirmWindow, null, null))
             });
         });
     },
@@ -227,6 +248,4 @@ var Main = React.createClass({
     }
 });
 
-//Remove all options from context menu
-//chrome.contextMenus.removeAll();
 React.render(React.createElement(Main), document.getElementById('container'));
