@@ -116,6 +116,10 @@ footer {
     overflow: auto;
 }
 
+.hidden {
+    display: none;
+}
+
 .btn-dialog {
     border-bottom: 2px solid #999999;
     border-radius: 0;

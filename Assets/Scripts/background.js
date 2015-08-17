@@ -95,14 +95,16 @@ bookmarks.pages = {
             var currentTab = tabs[0],
                 page = bookmarks.pages.createBookmark(info.pageUrl, currentTab.title);
 
-            bookmarks.getSavedBookmarks('Pages', function(savedBookmarks) {
-                if(savedBookmarks) {
-                    savedBookmarks.push(page);
-                    bookmarks.saveBookmarks({'Pages': savedBookmarks});
-                } else {
-                    bookmarks.alertUser("Unable to bookmark this page!");
-                }
-            });
+            if(page.key) {
+                bookmarks.getSavedBookmarks('Pages', function(savedBookmarks) {
+                    if(savedBookmarks) {
+                        savedBookmarks.push(page);
+                        bookmarks.saveBookmarks({'Pages': savedBookmarks});
+                    } else {
+                        bookmarks.alertUser("Unable to bookmark this page!");
+                    }
+                });
+            }
         });
     }
 };

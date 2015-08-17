@@ -58,17 +58,18 @@ var Video = React.createClass({
 var ConfirmWindow = React.createClass({
     displayName: 'ConfirmWindow',
     render: function() {
+        var displayClass = (this.props.hidden) ? 'hidden' : '';
         return React.createElement(
             'div',
-            null,
+            { className: displayClass },
             React.createElement('div',
                 {className: 'white-content'},
-                "Are you sure?",
+                "Remove this bookmark?",
                 React.createElement(
                     'div',
                     null,
-                    React.createElement('div', {className: 'btn-dialog confirm'}, "Yes"),
-                    React.createElement('div', {className: 'btn-dialog deny'}, "No")
+                    React.createElement('div', {className: 'btn-dialog confirm', onClick: this.props.deleteBookmark.bind(null, this.props.deleteIndex)}, "Yes"),
+                    React.createElement('div', {className: 'btn-dialog deny', onClick: this.props.hidePopup }, "No")
                 )
             ),
             React.createElement('div', {className: 'black-overlay'}, null)
@@ -85,6 +86,7 @@ var Main = React.createClass({
             pages: [],
             photos: [],
             videos: [],
+            confirmWindow:  React.createElement(ConfirmWindow, { hidden: true,  deleteBookmark: this.deleteBookmark }, null),
             pageToRender: null
         };
     },
@@ -97,7 +99,7 @@ var Main = React.createClass({
 
         //Allow deletion on drag over on header
         this.state.header.addEventListener('dragover', function(e) {e.preventDefault(); }, false);
-        this.state.header.addEventListener('drop', this.deleteBookmark, false);
+        this.state.header.addEventListener('drop', this.showPopup, false);
 
         //Populate the current page
         if(this.state.pageInfo.pageType === 'PAGES') {
@@ -135,19 +137,29 @@ var Main = React.createClass({
             next(bookmarks);
         });
     },
-    deleteBookmark: function(e) {
-        var confirmDelete = window.confirm('Are you sure you want to remove this bookmark?'),
-            index = e.dataTransfer.getData('index');
-
-        if(confirmDelete) {
-            if(this.state.pageInfo.pageType === 'PAGES') {
-                this.deletePage(index);
-            } else if(this.state.pageInfo.pageType === 'PHOTOS') {
-                this.deletePhoto(index);
-            } else if(this.state.pageInfo.pageType === 'VIDEOS') {
-                this.deleteVideo(index);
-            }
+    showPopup: function(e) {
+        var index = e.dataTransfer.getData('index');
+        var currentPageChildren = this.state.pageToRender._store.props.children;
+        this.setState({
+            pageToRender:  React.createElement('div', null, currentPageChildren, React.createElement(ConfirmWindow, { hidden: false, deleteIndex: index, deleteBookmark: this.deleteBookmark, hidePopup: this.hidePopup }, null))
+        });
+    },
+    hidePopup: function() {
+        var currentPageChildren = this.state.pageToRender._store.props.children[0];
+        this.setState({
+            pageToRender:  React.createElement('div', null, currentPageChildren)
+        });
+        this.dropBookmark();
+    },
+    deleteBookmark: function(index) {
+        if(this.state.pageInfo.pageType === 'PAGES') {
+            this.deletePage(index);
+        } else if(this.state.pageInfo.pageType === 'PHOTOS') {
+            this.deletePhoto(index);
+        } else if(this.state.pageInfo.pageType === 'VIDEOS') {
+            this.deleteVideo(index);
         }
+        this.hidePopup();
     },
     openUrl: function(url) {
         chrome.runtime.sendMessage({action: 'openUrl', url: url});
@@ -168,7 +180,7 @@ var Main = React.createClass({
             }
             context.setState({
                 pages: pages,
-                pageToRender: React.createElement('div', null, pages, React.createElement(ConfirmWindow, null, null))
+                pageToRender: React.createElement('div', null, pages)
             });
         });
     },
@@ -203,7 +215,7 @@ var Main = React.createClass({
     deletePhoto: function(index) {
         //Remove React components
         var photos = this.state.photos;
-        this.setState( {photos: photos.splice(index, 1)});
+        this.setState( {photos: photos.splice(index, 1) });
 
         //Remove bookmarks in storage
         this.getBookmarks('Photos', function(bookmarks) {
